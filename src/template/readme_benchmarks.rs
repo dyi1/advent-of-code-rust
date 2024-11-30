@@ -2,8 +2,7 @@
 /// The approach taken is similar to how `aoc-readme-stars` handles this.
 use std::{fs, io};
 
-use crate::template::timings::Timings;
-use crate::template::Day;
+use crate::template::{get_year, timings::Timings, Day};
 
 static MARKER: &str = "<!--- benchmarking table --->";
 
@@ -27,7 +26,8 @@ pub struct TablePosition {
 
 #[must_use]
 pub fn get_path_for_bin(day: Day) -> String {
-    format!("./src/bin/{day}.rs")
+    let year = get_year().unwrap_or_else(|| 2024);
+    format!("./src/bin/{year}/{day}.rs")
 }
 
 fn locate_table(readme: &str) -> Result<TablePosition, Error> {

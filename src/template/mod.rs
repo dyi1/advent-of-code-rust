@@ -66,3 +66,7 @@ macro_rules! solution {
         }
     };
 }
+
+pub fn get_year() -> Option<u16> {
+    std::env::var("AOC_YEAR").ok().and_then(|x| x.parse().ok())
+}

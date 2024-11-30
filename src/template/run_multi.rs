@@ -1,6 +1,6 @@
 use std::{collections::HashSet, io};
 
-use crate::template::{Day, ANSI_BOLD, ANSI_ITALIC, ANSI_RESET};
+use crate::template::{get_year, Day, ANSI_BOLD, ANSI_ITALIC, ANSI_RESET};
 
 use super::{
     all_days,
@@ -61,7 +61,8 @@ impl From<std::io::Error> for Error {
 
 #[must_use]
 pub fn get_path_for_bin(day: Day) -> String {
-    format!("./src/bin/{day}.rs")
+    let year = get_year().unwrap_or_else(|| 2024);
+    format!("./src/bin/{year}/{day}.rs")
 }
 
 /// All solutions live in isolated binaries.

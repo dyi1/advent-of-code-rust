@@ -1,10 +1,9 @@
+use crate::template::Day;
 /// Wrapper module around the "aoc-cli" command-line.
 use std::{
     fmt::Display,
     process::{Command, Output, Stdio},
 };
-
-use crate::template::Day;
 
 #[derive(Debug)]
 pub enum AocCommandError {
@@ -81,11 +80,13 @@ pub fn submit(day: Day, part: u8, result: &str) -> Result<Output, AocCommandErro
 }
 
 fn get_input_path(day: Day) -> String {
-    format!("data/inputs/{day}.txt")
+    let year: u16 = get_year().unwrap_or_else(|| 2024);
+    format!("data/inputs/{year}/{day}.txt")
 }
 
 fn get_puzzle_path(day: Day) -> String {
-    format!("data/puzzles/{day}.md")
+    let year: u16 = get_year().unwrap_or_else(|| 2024);
+    format!("data/puzzles/{year}/{day}.md")
 }
 
 fn get_year() -> Option<u16> {
