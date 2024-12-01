@@ -5,6 +5,7 @@ authors = ["Felix Spöttel <1682504+fspoettel@users.noreply.github.com>"]
 edition = "2021"
 default-run = "advent_of_code"
 publish = false
+autobins = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
@@ -28,3 +29,7 @@ pico-args = "0.5.0"
 tinyjson = "2.5.1"
 
 # Solution dependencies
+
+[[bin]]
+name = "2024_01"
+path = "src/bin/2024/01.rs"

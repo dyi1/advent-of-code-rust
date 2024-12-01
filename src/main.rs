@@ -24,6 +24,7 @@ mod args {
         },
         Solve {
             day: Day,
+            year: u16,
             release: bool,
             dhat: bool,
             submit: Option<u8>,
@@ -70,6 +71,7 @@ mod args {
             },
             Some("solve") => AppArguments::Solve {
                 day: args.free_from_str()?,
+                year: args.opt_value_from_str("--year")?.unwrap_or(2024),
                 release: args.contains("--release"),
                 submit: args.opt_value_from_str("--submit")?,
                 dhat: args.contains("--dhat"),
@@ -106,7 +108,11 @@ fn main() {
             AppArguments::Time { day, all, store } => time::handle(day, all, store),
             AppArguments::Download { day } => download::handle(day),
             AppArguments::Read { day } => read::handle(day),
-            AppArguments::Scaffold { day, download, overwrite } => {
+            AppArguments::Scaffold {
+                day,
+                download,
+                overwrite,
+            } => {
                 scaffold::handle(day, overwrite);
                 if download {
                     download::handle(day);
@@ -114,10 +120,11 @@ fn main() {
             }
             AppArguments::Solve {
                 day,
+                year,
                 release,
                 dhat,
                 submit,
-            } => solve::handle(day, release, dhat, submit),
+            } => solve::handle(day, year, release, dhat, submit),
             #[cfg(feature = "today")]
             AppArguments::Today => {
                 match Day::today() {

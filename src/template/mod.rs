@@ -19,7 +19,11 @@ pub const ANSI_RESET: &str = "\x1b[0m";
 #[must_use]
 pub fn read_file(folder: &str, day: Day) -> String {
     let cwd = env::current_dir().unwrap();
-    let filepath = cwd.join("data").join(folder).join(format!("{day}.txt"));
+    let year = get_year().unwrap();
+    let filepath = cwd
+        .join("data")
+        .join(folder)
+        .join(format!("{year}/{day}.txt"));
     let f = fs::read_to_string(filepath);
     f.expect("could not open input file")
 }
@@ -28,10 +32,11 @@ pub fn read_file(folder: &str, day: Day) -> String {
 #[must_use]
 pub fn read_file_part(folder: &str, day: Day, part: u8) -> String {
     let cwd = env::current_dir().unwrap();
+    let year = get_year().unwrap();
     let filepath = cwd
         .join("data")
         .join(folder)
-        .join(format!("{day}-{part}.txt"));
+        .join(format!("{year}/{day}-{part}.txt"));
     let f = fs::read_to_string(filepath);
     f.expect("could not open input file")
 }
