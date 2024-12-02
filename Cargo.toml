@@ -33,3 +33,7 @@ tinyjson = "2.5.1"
 [[bin]]
 name = "2024_01"
 path = "src/bin/2024/01.rs"
+
+[[bin]]
+name = "2024_02"
+path = "src/bin/2024/02.rs"
