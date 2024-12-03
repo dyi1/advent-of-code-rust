@@ -27,6 +27,7 @@ chrono = { version = "0.4.38", optional = true }
 dhat = { version = "0.3.3", optional = true }
 pico-args = "0.5.0"
 tinyjson = "2.5.1"
+regex = "1.10.2"
 
 # Solution dependencies
 
@@ -37,3 +38,7 @@ path = "src/bin/2024/01.rs"
 [[bin]]
 name = "2024_02"
 path = "src/bin/2024/02.rs"
+
+[[bin]]
+name = "2024_03"
+path = "src/bin/2024/03.rs"
