@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{btree_map::Values, HashMap};
 
 advent_of_code::solution!(11);
 
@@ -65,33 +65,49 @@ fn split_and_trim_zeros(stone: &str) -> (&str, &str) {
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    let mut cache: HashMap<String, Vec<String>> = HashMap::new();
-    let mut current_stones: Vec<String>;
+    let mut stone_cache: HashMap<String, Vec<String>> = HashMap::new();
+    let mut count_cache: HashMap<(u32, String), u32> = HashMap::new();
+
     let mut total: u32 = 0;
     for stone in input.split_whitespace() {
-        current_stones = vec![stone.to_string()];
-        for i in 0..75 {
-            println!("{}: {}", i, stone);
-            let mut next_stones: Vec<String> = Vec::new();
-            for stone in &current_stones {
-                if cache.contains_key(stone) {
-                    // println!("cache_hit!, {}", stone);
-                    if let Some(cached_stones) = cache.get(stone) {
-                        next_stones.extend(cached_stones.clone());
-                    }
-                } else {
-                    let next_stone = convert_next_stone(stone);
-                    cache.insert(stone.clone(), next_stone.clone());
-                    next_stones.extend(next_stone);
-                }
-            }
-            current_stones = next_stones;
-        }
-        total += current_stones.len() as u32;
+        total += count_stones(stone.to_string(), 25, &mut stone_cache, &mut count_cache);
         println!("{}", total);
     }
     // println!("{}", input);
     return Some(total);
+}
+
+fn count_stones(
+    stone: String,
+    layer: u32,
+    stone_cache: &mut HashMap<String, Vec<String>>,
+    count_cache: &mut HashMap<(u32, String), u32>,
+) -> u32 {
+    if layer == 0 {
+        return 1;
+    }
+
+    let count_cache_key = &(layer, stone.clone());
+    if count_cache.contains_key(count_cache_key) {
+        if let Some(counter) = count_cache.get(count_cache_key) {
+            return *counter;
+        }
+    }
+    let mut counter: u32 = 0;
+    let next_layer: Vec<String>;
+    if let Some(values) = stone_cache.get(&stone) {
+        next_layer = values.to_vec()
+    } else {
+        next_layer = convert_next_stone(&stone);
+        stone_cache.insert(stone.clone(), next_layer.clone());
+    };
+
+    for n in next_layer {
+        counter += count_stones(n, layer - 1, stone_cache, count_cache)
+    }
+    // Update the cache
+    count_cache.insert((layer, stone), counter);
+    return counter;
 }
 
 #[cfg(test)]
