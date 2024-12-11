@@ -1,6 +1,11 @@
 advent_of_code::solution!(9);
 
 pub fn part_one(input: &str) -> Option<u32> {
+    println!("{}", input);
+    for c in input.chars() {
+        println!("{}", c);
+    }
+
     None
 }
 
