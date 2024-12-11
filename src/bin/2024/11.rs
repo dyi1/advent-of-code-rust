@@ -64,14 +64,14 @@ fn split_and_trim_zeros(stone: &str) -> (&str, &str) {
     (left, final_right)
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     let mut stone_cache: HashMap<String, Vec<String>> = HashMap::new();
-    let mut count_cache: HashMap<(u32, String), u32> = HashMap::new();
+    let mut count_cache: HashMap<(u32, String), u64> = HashMap::new();
 
-    let mut total: u32 = 0;
+    let mut total: u64 = 0;
     for stone in input.split_whitespace() {
-        total += count_stones(stone.to_string(), 25, &mut stone_cache, &mut count_cache);
-        println!("{}", total);
+        total += count_stones(stone.to_string(), 75, &mut stone_cache, &mut count_cache);
+        // println!("{}", total);
     }
     // println!("{}", input);
     return Some(total);
@@ -81,8 +81,8 @@ fn count_stones(
     stone: String,
     layer: u32,
     stone_cache: &mut HashMap<String, Vec<String>>,
-    count_cache: &mut HashMap<(u32, String), u32>,
-) -> u32 {
+    count_cache: &mut HashMap<(u32, String), u64>,
+) -> u64 {
     if layer == 0 {
         return 1;
     }
@@ -93,7 +93,7 @@ fn count_stones(
             return *counter;
         }
     }
-    let mut counter: u32 = 0;
+    let mut counter: u64 = 0;
     let next_layer: Vec<String>;
     if let Some(values) = stone_cache.get(&stone) {
         next_layer = values.to_vec()
