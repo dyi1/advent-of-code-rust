@@ -1,4 +1,4 @@
-use std::collections::{btree_map::Values, HashMap};
+use std::collections::HashMap;
 
 advent_of_code::solution!(11);
 
