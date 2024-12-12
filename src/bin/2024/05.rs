@@ -52,7 +52,10 @@ fn is_valid(invalid_rules: &HashMap<&str, Vec<&str>>, list_items: &Vec<&str>) ->
     return true;
 }
 
-fn create_topological_sort(invalid_rules: &HashMap<&str, Vec<&str>>) -> HashMap<String, u32> {
+fn create_topological_sort(
+    invalid_rules: &HashMap<&str, Vec<&str>>,
+    valid_keys: &Vec<&str>,
+) -> HashMap<String, u32> {
     let mut in_degree: HashMap<String, u32> = HashMap::new();
     let mut graph: HashMap<String, Vec<String>> = HashMap::new();
     let mut result: HashMap<String, u32> = HashMap::new();
@@ -61,26 +64,30 @@ fn create_topological_sort(invalid_rules: &HashMap<&str, Vec<&str>>) -> HashMap<
     for (&from, to_list) in invalid_rules {
         let from_str = from.to_string();
         // Add 'from' node
-        graph.entry(from_str.clone()).or_insert_with(Vec::new);
-        in_degree.entry(from_str.clone()).or_insert(0);
+        if valid_keys.contains(&from) {
+            graph.entry(from_str.clone()).or_insert_with(Vec::new);
+            in_degree.entry(from_str.clone()).or_insert(0);
+        }
 
         // Add all 'to' nodes
         for &to in to_list {
             let to_str = to.to_string();
-            graph.entry(to_str.clone()).or_insert_with(Vec::new);
-            in_degree.entry(to_str.clone()).or_insert(0);
+            if valid_keys.contains(&to) {
+                graph.entry(to_str.clone()).or_insert_with(Vec::new);
+                in_degree.entry(to_str.clone()).or_insert(0);
+            }
         }
     }
-    println!("{:?}", graph);
-    println!("{:?}", in_degree);
 
     // Now build the edges
     for (&from, to_list) in invalid_rules {
         let from_str = from.to_string();
         for &to in to_list {
             let to_str = to.to_string();
-            graph.get_mut(&from_str).unwrap().push(to_str.clone());
-            *in_degree.get_mut(&to_str).unwrap() += 1;
+            if valid_keys.contains(&from) && valid_keys.contains(&to) {
+                graph.get_mut(&from_str).unwrap().push(to_str.clone());
+                *in_degree.get_mut(&to_str).unwrap() += 1;
+            }
         }
     }
 
@@ -128,14 +135,13 @@ pub fn part_two(input: &str) -> Option<u32> {
             invalid_prev.push(next);
         }
     }
-    let topological_sort = create_topological_sort(&invalid_rules);
-    println!("{:?}", topological_sort);
-    println!("here");
+
     for line in input.lines() {
         let list_items: Vec<&str> = line.split(",").collect();
         if list_items.len() > 1 {
             if !is_valid(&invalid_rules, &list_items) {
                 // Sort items according to topological order
+                let topological_sort = create_topological_sort(&invalid_rules, &list_items);
                 let mut sorted_items: Vec<(&str, u32)> = list_items
                     .iter()
                     .map(|&item| (item, *topological_sort.get(item).unwrap_or(&0)))
@@ -144,7 +150,6 @@ pub fn part_two(input: &str) -> Option<u32> {
                 let sorted_list: Vec<&str> =
                     sorted_items.into_iter().map(|(item, _)| item).collect();
                 let center_item = sorted_list[sorted_list.len() / 2].parse::<u32>().unwrap();
-                // println!("{}", center_item);
                 total += center_item;
             }
         }
