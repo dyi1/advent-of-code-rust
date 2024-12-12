@@ -71,6 +71,8 @@ fn create_topological_sort(invalid_rules: &HashMap<&str, Vec<&str>>) -> HashMap<
             in_degree.entry(to_str.clone()).or_insert(0);
         }
     }
+    println!("{:?}", graph);
+    println!("{:?}", in_degree);
 
     // Now build the edges
     for (&from, to_list) in invalid_rules {
