@@ -31,7 +31,7 @@ regex = "1.10.2"
 
 # Solution dependencies
 num = "0.4.0"
-
+priority-queue = "2.1.1"
 
 [[bin]]
 name = "2024_01"
@@ -89,6 +89,10 @@ path = "src/bin/2024/14.rs"
 [[bin]]
 name = "2024_15"
 path = "src/bin/2024/15.rs"
+
+[[bin]]
+name = "2024_16"
+path = "src/bin/2024/16.rs"
 
 [[bin]]
 name = "2024_17"
