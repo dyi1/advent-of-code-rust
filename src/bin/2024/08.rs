@@ -147,15 +147,6 @@ pub fn part_two(input: &str) -> Option<u32> {
     return Some(total);
 }
 
-fn _print_grid<T: std::fmt::Display>(grid: &Vec<Vec<T>>) {
-    for row in grid {
-        for cell in row {
-            print!("{} ", cell);
-        }
-        println!(); // New line after each row
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
