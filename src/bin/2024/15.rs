@@ -79,7 +79,7 @@ pub fn part_one(input: &str) -> Option<u32> {
         // print_grid(&grid);
     }
 
-    print_grid(&grid);
+    // print_grid(&grid);
     let mut total: u32 = 0;
     for y in 0..grid.len() {
         for x in 0..grid[0].len() {
