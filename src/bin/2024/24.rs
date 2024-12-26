@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 advent_of_code::solution!(24);
 
+#[derive(Debug)]
 struct Instruction {
     val1: String,
     val2: String,
@@ -118,7 +119,56 @@ pub fn part_one(input: &str) -> Option<u64> {
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    None
+    let sections: Vec<&str> = input.split("\n\n").collect();
+    let mut wires: HashMap<String, u32> = HashMap::new();
+    for w in sections[0].lines() {
+        // println!("{}", w);
+        let items: Vec<String> = w.split(":").map(|s| s.trim().to_string()).collect();
+        let key = items[0].clone();
+        let num = items[1].parse::<u32>().unwrap();
+        wires.insert(key, num);
+    }
+
+    let mut dag: HashMap<String, Vec<String>> = HashMap::new();
+    let mut instructions: HashMap<String, Instruction> = HashMap::new();
+
+    for i in sections[1].lines() {
+        let items: Vec<String> = i.split_whitespace().map(|s| s.trim().to_string()).collect();
+        let res = items[4].clone();
+        let val1 = items[0].clone();
+        let op = items[1].clone();
+        let val2 = items[2].clone();
+
+        dag.insert(res.clone(), vec![val1.clone(), val2.clone()]);
+        instructions.insert(
+            res.clone(),
+            Instruction {
+                val1: val1,
+                val2: val2,
+                op: op,
+                res: res,
+            },
+        );
+    }
+    let test_keys = ["z00", "z01", "z02", "z03"];
+    for t in test_keys {
+        println!("{}", t);
+
+        let mut next_keys_to_test = vec![t];
+        let empty_vec = vec![];
+        while next_keys_to_test.len() > 0 {
+            let next_key = next_keys_to_test.pop().unwrap();
+            let found = dag.get(next_key).unwrap_or(&empty_vec);
+            for k in found {
+                next_keys_to_test.push(k.as_str());
+            }
+            if instructions.get(next_key).is_some() {
+                println!("{:?}", instructions.get(next_key));
+            }
+        }
+    }
+
+    return Some(0);
 }
 
 #[cfg(test)]
